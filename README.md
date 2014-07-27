@@ -1,4 +1,4 @@
-d3examples
+D3jsexamples
 ==========
 
-Examples and Demos using D3. Unleash the Maths inside you. Send more demos..
+Examples and Demos using D3js. Unleash the Maths inside you. Send more demos..
