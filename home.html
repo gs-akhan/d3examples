@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>This is nice</title>
+	<meta charset ="utf-8" />
+	<script src="d3.v3.min.js" charset="utf-8"></script>
+	<style>
+		* {
+			margin :0px;
+			padding: 0px;
+		}
+
+		body {
+			height : 100%;
+			width  : 100%;
+			display: block;
+			overflow: hidden;
+		}
+		svg {
+			display: block;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<svg height = "100%" width = "100%"></svg>
+	<script>
+		var svg = d3.selectAll('svg');
+		var data = d3.range(25);
+		var scale = d3.scale.linear().domain([0, d3.max(data)]).range([0, window.innerHeight - 25]);
+		var color =  d3.scale.linear().domain([0, d3.max(data)]).range(["green", "red"]);
+		
+
+		svg.selectAll('rect').data(data).enter()
+		.append('rect')
+		.attr({
+			height : function(d) { return scale(d);},
+			width  : "50",
+			fill   : function(d) { return color(d) }, 
+			x  :  function(d, i) { return 51 * i;},
+			y  : function(d, i) { return  window.innerHeight - scale(d) - 25;}
+		})
+
+	</script>
+
+</body>
+</html>
