@@ -63,8 +63,17 @@
 		fill :"red" 
 	};
 
+	var defaultAttr = {
+		cx : 0,
+		cy : 0,
+		r : 0,
 
-	svg.selectAll('circle').data(data).enter().append('circle').attr(circleAttr);
+	};
+
+
+	svg.selectAll('circle').data(data).enter().append('circle').attr(defaultAttr).transition().delay(function(d, i) {
+		return i * 100;
+	}).duration(2500).ease("elastic").attr(circleAttr);
 
 	 var handleMouseOver = function(d, i) {
 		svg.append("text").attr({
