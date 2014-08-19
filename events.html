@@ -4,8 +4,11 @@
 <head>
 	<title>This is nice</title>
 	<meta charset ="utf-8" />
-	<script src="d3.v3.min.js" charset="utf-8"></script>
+	<script src="d3.v3.min.js" charset="utf-8" type = "text/javascript"></script>
 	<style>
+		
+		/* @import url("hello.css");
+		 */
 		* {
 			margin :0px;
 			padding: 0px;
@@ -82,7 +85,6 @@
 		});
 
 		svg.selectAll("circle").on("mouseover", function(d, i) {
-
 			svg.append("text").attr({
 				id : "it" + d.x +""+ d.y, 
 				x : scaleX(d.x),

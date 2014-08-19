@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset = "utf-8" />
+	<script src="d3.v3.min.js" charset="utf-8" type = "text/javascript"></script>
+	<title>More custom Events</title>
+	<style>
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+		svg {
+			display: block;
+			overflow: hidden;
+		}
+		.axis line, .axis path  {
+			fill : none;
+			stroke : black;
+			shape-rendering : crispEdges;
+		}
+	</style>
+</head>
+<body>
+	
+	<script>
+	var margin = { top: 30, right: 10, bottom: 10, left: 30 },
+	    width = 960 - margin.left - margin.right,
+	    height = 640 - margin.top - margin.bottom;
+	
+	var svg = d3.select('body').append('svg')
+	    .attr('width', width + margin.left + margin.right)
+	    .attr('height', height + margin.top + margin.bottom);
+
+	var data = [{x : 20, y : 50},
+			{x : 20, y : 65},
+			{x : 35, y : 90},
+			{x : 0,  y : 22},
+			{x : 60, y : 35},
+			{x : 45, y : 100},
+			{x : 85, y : 64},
+			{x : 66, y : 80},
+			{x : 32, y : 66},
+			{x : 20, y : 95},
+			{x : 98, y : 42},
+			{x : 53, y : 36},
+			{x : 100, y : 84}
+			];	
+
+	
+
+	var scaleX = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.x; })]).range([
+		margin.left, width - margin.right
+		]);
+
+	var scaleY = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.y; })]).range([
+		margin.top, height - margin.bottom
+		]);
+
+	var circleAttr = {
+		cx : function(d) { return scaleX(d.x); },
+		cy : function(d) { return scaleY(d.y); },
+		r : 5,
+		fill :"red" 
+	};
+
+
+	svg.selectAll('circle').data(data).enter().append('circle').attr(circleAttr);
+
+	 var handleMouseOver = function(d, i) {
+		svg.append("text").attr({
+			id : "it" + d.x +""+ d.y, 
+			x : scaleX(d.x),
+			y : scaleY(d.y) - 10,
+		}).text(function() {
+			return [d.x, d.y];
+		});
+
+
+
+	};
+
+	var handleMouseOut = function(d, i) {
+
+		svg.selectAll("#it"+d.x+""+d.y).remove();
+
+		
+	};
+
+	svg.selectAll("circle").on("mouseout", handleMouseOut);
+
+	svg.selectAll("circle").on("mouseover", handleMouseOver);
+
+	var axisX = d3.svg.axis().scale(scaleX).orient('top');
+	var axisY = d3.svg.axis().scale(scaleY).orient('left');
+
+
+	svg.append('g').attr('class','axis').attr('transform', 'translate('+[0,margin.top]+')').call(axisX);
+	svg.append('g').attr('class','axis').attr('transform', 'translate('+[margin.left,0]+')').call(axisY);
+
+	svg.on("click", function() {
+		var cords = d3.mouse(this);
+		data.push({
+			x : Math.round(scaleX.invert(cords[0])),
+			y : Math.round(scaleY.invert(cords[1])),
+			r : 5,
+			fill : "red"
+		});	
+
+		var circle = svg.selectAll("circle").data(data).enter().append("circle").attr({
+			cx : 0,
+			cy : 0,
+			r : 0,
+
+		});
+		circle.transition().duration(1100).ease("elastic").attr(circleAttr);
+
+		circle.on("mouseover", handleMouseOver);
+		circle.on("mouseout", handleMouseOut);
+		
+	});
+
+	</script>
+
+</body>
+</html>
