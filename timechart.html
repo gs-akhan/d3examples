@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="d3.v3.min.js" charset="utf-8" type = "text/javascript"></script>
+	<title>Time Chart</title>
+	<style>
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+		svg {
+			display: block;
+			overflow: hidden;
+		}
+		.axis line, .axis path  {
+			fill : none;
+			stroke : black;
+			shape-rendering : crispEdges;
+		}
+
+	</style>
+</head>
+<body>
+	
+	<script>
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 },
+
+		width = window.innerWidth - 50 ,
+		height = window.innerHeight - 50;
+
+		var svg = d3.select('body').append('svg').attr({
+			height : height,
+			width : width
+		}).style({
+			"margin-left" : 25
+		});
+
+
+		var data = [{value : 17,year  : 2007},{value : 20,year  : 2008},{value : 25,year  : 2009},{value : 29,year  : 2010},
+		{value : 33,year  : 2011},{value : 39,year  : 2012},{value : 50,year  : 2013},{value : 65,year  : 2014}];
+
+
+		var timeScale = d3.scale.linear().domain(d3.extent(data, function(d) { return d.year; })).range([50, width-50]);
+		var valueScale = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.value; })]).range([height-50, 50]);
+
+
+		svg.selectAll("circle").data(data).enter().append("circle").attr({
+			cx  : function(d) { return timeScale(d.year); },
+			cy  : function(d) { return valueScale(d.value); },
+			"fill" : "#fff",
+			"stroke-width" : 4,
+			"stroke" : "green",
+			r : 4
+
+		});
+
+
+		var xAxis = d3.svg.axis().scale(timeScale).orient("bottom");
+		var yAxis = d3.svg.axis().scale(valueScale).orient("left");
+
+
+
+		svg.append('g').attr({ 
+			"transform" : "translate("+[0,height-50]+")",
+			"class" : "axis"
+		}).call(xAxis);
+
+		svg.append('g').attr({ 
+			"transform" : "translate("+[50, 0]+")",
+			"class" : "axis"
+		}).call(yAxis);
+
+
+
+
+
+
+
+	</script>
+</body>
+</html>
+
