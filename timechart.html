@@ -44,17 +44,7 @@
 		var valueScale = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.value; })]).range([height-50, 50]);
 
 
-		svg.selectAll("circle").data(data).enter().append("circle").attr({
-			cx  : function(d) { return timeScale(d.year); },
-			cy  : function(d) { return valueScale(d.value); },
-			"fill" : "#fff",
-			"stroke-width" : 4,
-			"stroke" : "green",
-			r : 4
-
-		});
-
-
+	
 		var xAxis = d3.svg.axis().scale(timeScale).orient("bottom");
 		var yAxis = d3.svg.axis().scale(valueScale).orient("left");
 
@@ -71,6 +61,29 @@
 		}).call(yAxis);
 
 
+		var line = d3.svg.line().
+					x(function(d) { return timeScale(d.year); }).
+					y(function(d) { return valueScale(d.value); });
+
+
+		svg.append("path").data([data])
+			.attr({
+				d : line,
+				fill : "none",
+				stroke : "#dedede",
+				"stroke-width" : 4
+			});
+
+
+		svg.selectAll("circle").data(data).enter().append("circle").attr({
+			cx  : function(d) { return timeScale(d.year); },
+			cy  : function(d) { return valueScale(d.value); },
+			"fill" : "#fff",
+			"stroke-width" : 4,
+			"stroke" : "green",
+			r : 4
+
+		});
 
 
 
