@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Animating Bar chat</title>
+	<script src = "d3.v3.min.js"></script>
+	<style>
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+		.wrapper {
+			text-align: center;
+			width: 100%;
+			height: 100%;
+		}
+		.chartContainer {
+			width : 700px;
+			height : 500px;
+			margin : 0px auto;
+			vertical-align: bottom;
+			display: table-cell;
+			text-align: left;
+		}
+
+		.chart  {
+			display: inline-block;
+			margin-right: 20px;
+			vertical-align: bottom;
+			width: 20px;
+			background-color: red;
+
+
+		}
+		.hor {
+			width: 700px;
+			height: 500px;
+			margin : 0 auto;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="wrapper">
+		<div class="hor">
+			<div class="chartContainer">
+		
+			</div>
+		</div>
+	</div>
+	<script>
+	//First let us generate some data a random one 
+
+	var data = [];
+	for(var i = 0; i <= 15; i++) {
+		data.push(Math.floor(Math.random() * 450));
+	}
+
+
+	var chart = d3.select(".chartContainer").selectAll(".chart");
+	chart.data(data).enter().append("div")
+		.attr("class", "chart").transition().delay(function(d,i) {
+			return i * 50;
+		}).ease("linear").style({
+			height : function(d) { return d + "px"; }
+		});
+
+	</script>
+</body>
+</html>
