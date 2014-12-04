@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Donut chart Example</title>
+	<script type="text/javascript" src = "d3.v3.min.js"></script>
+	<style type="text/css">
+
+	.tooltip{
+		  position: absolute;	
+		  text-align: center;	
+		  width: 100px;	
+		  height: 28px;		
+		  padding: 2px;	
+		  font: 12px sans-serif;	
+		  background: green;	
+		  border: 0px;					
+		  border-radius: 8px;
+		  color:white;
+		  box-shadow: -3px 3px 15px #888888;
+		  opacity:0;	
+	}
+
+	</style>
+</head>
+<body>
+		
+	<script type="text/javascript">
+	var svg = d3.select("body").append("svg").attr({
+		height : 600,
+		width  : 600
+	});
+
+
+	var data = [100,20,80];
+
+	var color = d3.scale.ordinal().range(["red", "green", "yellow"]);
+	var group = svg.append('g').attr('transform', 'translate(300,300)');
+
+	var arc   = d3.svg.arc()
+					.innerRadius(100)
+					.outerRadius(120);
+	
+	var pie   = d3.layout.pie()
+					.value(function(d) { return d;});
+
+
+
+    var div = d3.select("body").append("div").attr("class", "tooltip");
+
+	var arcs  = group.selectAll(".arc")
+					.data(pie(data))
+					.enter()
+					.append('g')
+					.attr('class', 'arc') .on("mousemove",function(d){
+			        	var mouseVal = d3.mouse(this);
+			        	div.style("display","none");
+			        	div
+			        	.html("population:"+d.data)
+			            .style("left", (d3.event.pageX+12) + "px")
+			            .style("top", (d3.event.pageY-10) + "px")
+			            .style("opacity", 1)
+			            .style("display","block");
+        
+        }).on("mouseout",function(){div.html(" ").style("display","none");});
+
+	arcs.append('path').attr('d', arc).attr('fill', function(d) {return color(d.data)});  
+
+	arcs.append('text').attr('transform', function(d) {
+			return 'translate('+arc.centroid(d)+')';
+	})
+	.text(function(d) {
+		return d.data;
+	});
+
+
+	svg.append("text").text("50 %").attr("transform", "translate(300,300)").attr("text-anchor", "middle").attr({
+		"font-size" : "25px"
+	});
+	</script>
+
+</body>
+</html>
