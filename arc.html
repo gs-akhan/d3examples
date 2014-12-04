@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Example on arc</title>
+	<script src = "d3.v3.min.js"></script>
+</head>
+<body>
+	
+	<script>
+	var svg = d3.select("body").append("svg");
+		svg.attr('height', 600).attr('width', 600);
+
+	var group = svg.append('g').attr('transform', 'translate(120,120)');
+
+	var arc = d3.svg.arc()
+				.innerRadius(100)
+				.outerRadius(120)
+				.startAngle(0)
+				.endAngle(Math.PI * 2 - 2);
+
+		group.append("path").attr("d", arc).attr('fill', 'green' );
+	</script>
+
+</body>
+</html>
