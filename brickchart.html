@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Box Chart</title>
+	<script type="text/javascript" src = "d3.v3.min.js"></script>
+</head>
+<style type="text/css">
+	.container {
+		width : 750px;
+		height : auto;
+		margin:  0px auto;
+		margin-top : 20px;
+	}
+	.row {
+		display:block;
+		width: auto;
+		height: auto;
+		margin: 0px;
+		box-sizing: border-box;
+		padding: 0px;
+
+	} 
+	.box {
+		margin : 0px;
+		padding : 0px;
+		width : 100px;
+		height : 100px;
+		border : 1px solid red;
+		display: table-cell;
+		box-sizing: border-box;
+		margin-right : 3px;
+	}
+</style>
+<body>
+	<div class = "container" style="width : 900px; height : 500px;">
+		
+
+	</div>
+	<script type="text/javascript">
+
+		function BrickChart($ele, config) {
+
+			if(!config) {
+				throw new Error("BrickChart error : config not passed");
+				return;
+			}
+			if(!config.series) {
+				throw new Error("BrickChart error : 'series' not passed");
+			}
+			if(!config.cateogaries) {
+				throw new Error("BrickChart error : 'cateogaries' not passed");
+				return
+			}
+			this.containerElement = $ele;
+			this.config = config;
+			this.draw();
+		};
+
+		BrickChart.prototype.draw = function() {
+			var cateogaries = this.config.cateogaries || [];
+			var _width =  this.containerElement.offsetWidth;
+			var _height = this.containerElement.offsetHeight;
+			var margin = { top: 0, right: 0, bottom: 0, left: 0 },
+	    		width = _width - margin.left - margin.right,
+		   	 	height = _height - margin.top - margin.bottom;
+			
+			var svg = d3.select(this.containerElement).append('svg')
+		    			.attr('width', width + margin.left + margin.right)
+		    			.attr('height', height + margin.top + margin.bottom);
+
+		   	var legendAreaWidth = _width * 0.20; //20% of the total width;
+		   	var chartAreaWidth =  _width * 0.80; //80% width ogf total width
+
+		   	var groups = svg.selectAll('g').data(data).enter().append("g").attr('transform', function(d, i) {
+		        return 'translate('+[legendAreaWidth, 52 * i + 50]+')';
+		    });
+
+		   	var maxSeries = d3.max(this.config.series).length;
+		   	var brickWidth = chartAreaWidth/maxSeries;
+		   	var brickHeight = (_height * 0.60)/this.config.series.length;
+
+			groups.each(function(d, i) {
+
+				// Counter digits on the left , vertically aligned 
+				svg.append("text")         // append text
+				    .attr("x", legendAreaWidth - 20) //Making this appear next to the bricks -20 for some margin        
+				    .attr("y", 52 * i + 50 + 25) // Making them center of the each divs
+				    .attr("text-anchor", "middle") // set anchor y justification 
+				    .text(i);
+
+				//Counter digits on top of the bricks
+				svg.append("text")         // append text
+				    .attr("x", brickWidth*i+legendAreaWidth + brickWidth/2) // set x position of left side of text
+				    .attr("y", 40)           // set y position of bottom of text
+				    .attr("text-anchor", "middle") // set anchor y justification 
+				    .text(i);
+
+				//building cateogaries.
+				svg.append("text")	// append text
+				    .attr("x", legendAreaWidth - 50) // set x position of left side of text
+				    .attr("y", 52 * i + 50 + 25)
+				    .attr("text-anchor", "end") // set anchor y justification 
+				    .text(companies[i]);
+			});
+
+		
+			var bricks = groups.selectAll('rect').data(function(d) {return d;}).enter().append('rect').attr({
+				width : brickWidth, height : 50, x : function(d, i) {return (brickWidth + 2)*i;} 
+			}).on("click", function() {
+				console.log(arguments)
+			});
+
+		}
+
+
+		// var scaleX = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.x; })]).range([
+		// 	margin.left, width - margin.right
+		// ]);fac
+
+		
+		var data = [[10,2,3,4,5], [1,2,3,4], [1,2,3], [1,2], [1]];
+		
+		var companies = ["Marketo", "Facebook", "Google", "CA", "Box"]
+		
+		var azhar = new BrickChart(document.getElementsByClassName("container")[0], {
+			cateogaries : companies,
+			series : data
+		});
+	
+	</script>
+</body>
+</html>
